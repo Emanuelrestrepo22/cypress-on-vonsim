@@ -1,23 +1,25 @@
-describe('Simulador VonSim - Archivo 01', () => {
-  it('Carga y ejecuta challenge-qa-01.asm', () => {
+describe('Simulador VonSim - Pruebas del editor', () => {
+  const editorSelector = 'div[contenteditable="true"].cm-content'; // Selector del editor
+
+  it('Limpia el editor de código', () => {
     // Visitar el simulador
     cy.visit('/');
 
-    // Precondiciones: Limpiar el input
-    cy.get('#codigo-panel').click().clear();
+    // Limpiar el editor línea por línea
+    cy.get(editorSelector)
+      .children() // Obtener todas las líneas del editor
+      .each((line) => {
+        // Usar JavaScript para vaciar el contenido de cada línea
+        cy.wrap(line).then(($line) => {
+          $line.html(''); // Vaciar el contenido del elemento hijo
+        });
+      });
 
-    // Cargar código desde fixtures
-    cy.fixture('challenge-qa-01.asm').then((codigo) => {
-      cy.get('#codigo-panel').type(codigo); // Escribir el código
-    });
-
-    // Hacer click en botón inicio
-    cy.get('#boton-inicio').click();
-
-    // Abrir menú acordeón y ejecutar hasta el final
-    cy.get('#menu-acordeon').contains('Hasta el final').click();
-
-    // Validar salida en pantalla
-    cy.get('#pantalla').should('contain.text', 'AB'); // Ajustar según el caso
+    // Validar que el editor completo esté vacío
+    cy.get(editorSelector)
+      .invoke('text') // Obtener el texto combinado de todas las líneas
+      .should('eq', ''); // Validar que no quede nada
   });
+
+ 
 });

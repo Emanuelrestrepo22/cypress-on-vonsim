@@ -1,9 +1,9 @@
-const { defineConfig } = require("cypress");
+const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   e2e: {
     baseUrl: "https://vonsim.github.io", // URL base del simulador
-    fixturesFolder: "cypress/fixtures",
-    integrationFolder: "cypress/integration",
+    specPattern: "cypress/integration/**/*.cy.js", // Patrón de los archivos de prueba
+    supportFile: false,
   },
 });

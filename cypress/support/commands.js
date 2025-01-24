@@ -1,25 +1,18 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+// Comando personalizado para limpiar un editor de código
+Cypress.Commands.add('limpiarEditor', (selector) => {
+    // Seleccionar el contenedor padre
+    cy.get(selector)
+      .children() // Obtener todos los hijos (líneas de código)
+      .each((line) => {
+        // Usar JavaScript para limpiar completamente el contenido del hijo
+        cy.wrap(line).then(($line) => {
+          $line.html(''); // Vaciar el contenido del elemento hijo
+        });
+      });
+  
+    // Verificar que el editor esté vacío (opcional)
+    cy.get(selector)
+      .invoke('text') // Obtener el texto combinado de todas las líneas
+      .should('eq', ''); // Validar que no quede nada
+  });
+  
